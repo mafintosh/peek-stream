@@ -1,0 +1,26 @@
+{
+  "name": "peek-stream",
+  "version": "0.0.0",
+  "description": "transform stream that lets you peek the first part of a stream before deciding how to parse it",
+  "main": "index.js",
+  "dependencies": {
+    "duplexify": "^1.5.2",
+    "through2": "^0.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mafintosh/peek-stream"
+  },
+  "keywords": [
+    "peek",
+    "stream",
+    "parse",
+    "swap"
+  ],
+  "author": "Mathias Buus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mafintosh/peek-stream/issues"
+  },
+  "homepage": "https://github.com/mafintosh/peek-stream"
+}
