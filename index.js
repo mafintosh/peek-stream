@@ -7,11 +7,11 @@ var isObject = function(data) {
   return !Buffer.isBuffer(data) && typeof data !== 'string'
 }
 
-module.exports = function(onpeek) {
+var peek = function(maxBuffer, onpeek) {
+  if (typeof maxBuffer === 'function') return peek(65535, maxBuffer)
+
   var buffer = []
   var bufferSize = 0
-  var maxBuffer = 65535
-
   var dup = duplexify.obj()
 
   var peeker = through.obj({highWaterMark:1}, function(data, enc, cb) {
@@ -62,3 +62,5 @@ module.exports = function(onpeek) {
 
   return dup
 }
+
+module.exports = peek
