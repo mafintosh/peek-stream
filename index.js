@@ -14,6 +14,7 @@ var peek = function(opts, onpeek) {
 
   var maxBuffer = typeof opts.maxBuffer === 'number' ? opts.maxBuffer : 65535
   var strict = opts.strict
+  var newline = opts.newline !== false
 
   var buffer = []
   var bufferSize = 0
@@ -23,12 +24,14 @@ var peek = function(opts, onpeek) {
     if (isObject(data)) return ready(data, null, cb)
     if (!Buffer.isBuffer(data)) data = new Buffer(data)
 
-    var nl = Array.prototype.indexOf.call(data, 10)
-    if (nl > 0 && data[nl-1] === 13) nl--
+    if (newline) {
+      var nl = Array.prototype.indexOf.call(data, 10)
+      if (nl > 0 && data[nl-1] === 13) nl--
 
-    if (nl > -1) {
-      buffer.push(data.slice(0, nl))
-      return ready(Buffer.concat(buffer), data.slice(nl), cb)
+      if (nl > -1) {
+        buffer.push(data.slice(0, nl))
+        return ready(Buffer.concat(buffer), data.slice(nl), cb)
+      }
     }
 
     buffer.push(data)
