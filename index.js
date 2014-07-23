@@ -7,8 +7,13 @@ var isObject = function(data) {
   return !Buffer.isBuffer(data) && typeof data !== 'string'
 }
 
-var peek = function(maxBuffer, onpeek) {
-  if (typeof maxBuffer === 'function') return peek(65535, maxBuffer)
+var peek = function(opts, onpeek) {
+  if (typeof opts === 'number') opts = {maxBuffer:opts}
+  if (typeof opts === 'function') return peek(null, opts)
+  if (!opts) opts = {}
+
+  var maxBuffer = typeof opts.maxBuffer === 'number' ? opts.maxBuffer : 65535
+  var strict = opts.strict
 
   var buffer = []
   var bufferSize = 0
@@ -30,10 +35,12 @@ var peek = function(maxBuffer, onpeek) {
     bufferSize += data.length
 
     if (bufferSize < maxBuffer) return cb()
+    if (strict) return cb(new Error('No newline found'))
     ready(Buffer.concat(buffer), null, cb)
   })
 
   var onpreend = function() {
+    if (strict) return dup.destroy(new Error('No newline found'))
     dup.cork()
     ready(Buffer.concat(buffer), null, function(err) {
       if (err) return dup.destroy(err)
