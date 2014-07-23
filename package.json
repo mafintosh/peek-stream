@@ -1,7 +1,7 @@
 {
   "name": "peek-stream",
   "version": "0.0.0",
-  "description": "transform stream that lets you peek the first part of a stream before deciding how to parse it",
+  "description": "Transform stream that lets you peek the first line before deciding how to parse it",
   "main": "index.js",
   "dependencies": {
     "duplexify": "^3.0.0",
