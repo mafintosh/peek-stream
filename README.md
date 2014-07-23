@@ -6,6 +6,9 @@ Transform stream that lets you peek the first line before deciding how to parse 
 npm install peek-stream
 ```
 
+[![build status](http://img.shields.io/travis/mafintosh/peek-stream.svg?style=flat)](http://travis-ci.org/mafintosh/peek-stream)
+![dat](http://img.shields.io/badge/Development%20sponsored%20by-dat-green.svg?style=flat)
+
 ## Usage
 
 ``` js
