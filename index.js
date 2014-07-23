@@ -13,6 +13,7 @@ module.exports = function(onpeek) {
   var maxBuffer = 65535
 
   var dup = duplexify.obj()
+
   var peeker = through.obj({highWaterMark:1}, function(data, enc, cb) {
     if (isObject(data)) return ready(data, null, cb)
     if (!Buffer.isBuffer(data)) data = new Buffer(data)
@@ -22,8 +23,7 @@ module.exports = function(onpeek) {
 
     if (nl > -1) {
       buffer.push(data.slice(0, nl))
-      overflow = data.slice(nl)
-      return ready(Buffer.concat(buffer), overflow, cb)
+      return ready(Buffer.concat(buffer), data.slice(nl), cb)
     }
 
     buffer.push(data)
@@ -33,24 +33,31 @@ module.exports = function(onpeek) {
     ready(Buffer.concat(buffer), null, cb)
   })
 
-  var onprefinish = function(cb) {
-    ready(Buffer.concat(buffer), null, cb)
+  var onpreend = function() {
+    dup.cork()
+    ready(Buffer.concat(buffer), null, function(err) {
+      if (err) return dup.destroy(err)
+      dup.uncork()
+    })
   }
 
   var ready = function(data, overflow, cb) {
-    dup.removeListener('prefinish', onprefinish)
+    dup.removeListener('preend', onpreend)
     onpeek(data, function(err, parser) {
       if (err) return cb(err)
+
       dup.setWritable(parser)
       dup.setReadable(parser)
-      parser.write(data)
+
+      if (data) parser.write(data)
       if (overflow) parser.write(overflow)
-      data = overflow = buffer = peeker = null // free the data
+
+      overflow = buffer = peeker = null // free the data
       cb()
     })
   }
 
-  dup.on('prefinish', onprefinish)
+  dup.on('preend', onpreend)
   dup.setWritable(peeker)
 
   return dup

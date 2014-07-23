@@ -4,7 +4,7 @@
   "description": "transform stream that lets you peek the first part of a stream before deciding how to parse it",
   "main": "index.js",
   "dependencies": {
-    "duplexify": "^1.5.2",
+    "duplexify": "^3.0.0",
     "through2": "^0.5.1"
   },
   "repository": {
@@ -22,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/mafintosh/peek-stream/issues"
   },
-  "homepage": "https://github.com/mafintosh/peek-stream"
+  "homepage": "https://github.com/mafintosh/peek-stream",
+  "devDependencies": {
+    "concat-stream": "^1.4.6",
+    "tape": "^2.13.4"
+  }
 }
