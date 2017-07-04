@@ -39,7 +39,8 @@ var peek = function(opts, onpeek) {
 
     if (bufferSize < maxBuffer) return cb()
     if (strict) return cb(new Error('No newline found'))
-    ready(Buffer.concat(buffer), null, cb)
+    var b = Buffer.concat(buffer)
+    ready(b.slice(0, maxBuffer), b.length > maxBuffer ? b.slice(maxBuffer) : null, cb)
   })
 
   var onpreend = function() {
