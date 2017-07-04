@@ -15,6 +15,7 @@ var peek = function(opts, onpeek) {
   var maxBuffer = typeof opts.maxBuffer === 'number' ? opts.maxBuffer : 65535
   var strict = opts.strict
   var newline = opts.newline !== false
+  var consumeData = opts.consumeData === true
 
   var buffer = []
   var bufferSize = 0
@@ -59,7 +60,7 @@ var peek = function(opts, onpeek) {
       dup.setWritable(parser)
       dup.setReadable(parser)
 
-      if (data) parser.write(data)
+      if (data && consumeData === false) parser.write(data)
       if (overflow) parser.write(overflow)
 
       overflow = buffer = peeker = null // free the data
