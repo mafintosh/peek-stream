@@ -4,6 +4,7 @@
   "description": "Transform stream that lets you peek the first line before deciding how to parse it",
   "main": "index.js",
   "dependencies": {
+    "buffer-from": "^1.0.0",
     "duplexify": "^3.5.0",
     "through2": "^2.0.3"
   },

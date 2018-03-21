@@ -1,5 +1,6 @@
 var duplexify = require('duplexify')
 var through = require('through2')
+var bufferFrom = require('buffer-from')
 
 var noop = function() {}
 
@@ -22,7 +23,7 @@ var peek = function(opts, onpeek) {
 
   var peeker = through.obj({highWaterMark:1}, function(data, enc, cb) {
     if (isObject(data)) return ready(data, null, cb)
-    if (!Buffer.isBuffer(data)) data = new Buffer(data)
+    if (!Buffer.isBuffer(data)) data = bufferFrom(data)
 
     if (newline) {
       var nl = Array.prototype.indexOf.call(data, 10)
