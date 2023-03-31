@@ -79,6 +79,24 @@ var parse = peek({
 
 If you want to emit an error if no newline is found set `strict: true` as well.
 
+Normally `data` is written to the swapped stream as-is. To override `data`, pass a third argument to `swap`:
+
+``` js
+var parse = peek(function(data, swap) {
+  // Strip utf-8 byte order mark
+  if (data.byteLength >= 3 && data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf) {
+    data = data.subarray(3)
+  }
+
+  if (isCSV(data)) {
+    // The csv stream will not receive the BOM
+    swap(null, csv(), data)
+    return
+  }
+
+  swap(new Error('No parser available'))
+})
+```
 
 ## License
 
