@@ -87,3 +87,19 @@ tape('swap to error async', function(t) {
   p.write('world\n')
   p.end()
 })
+
+tape('swap with custom data', function(t) {
+  var p = peek(function(data, swap) {
+    t.same(data.toString(), 'hello')
+    swap(null, through(uppercase), 'hi')
+  })
+
+  p.pipe(concat(function(data) {
+    t.same(data.toString(), 'HI\nWORLD\n')
+    t.end()
+  }))
+
+  p.write('hello\n')
+  p.write('world\n')
+  p.end()
+})

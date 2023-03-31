@@ -54,12 +54,13 @@ var peek = function(opts, onpeek) {
 
   var ready = function(data, overflow, cb) {
     dup.removeListener('preend', onpreend)
-    onpeek(data, function(err, parser) {
+    onpeek(data, function(err, parser, customData) {
       if (err) return cb(err)
 
       dup.setWritable(parser)
       dup.setReadable(parser)
 
+      if (customData) data = customData
       if (data) parser.write(data)
       if (overflow) parser.write(overflow)
 
